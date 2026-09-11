@@ -1,0 +1,66 @@
+{
+  "simple": {
+    "naive": {
+      "total_tx": 10800,
+      "data_reduction_pct": null,
+      "rmse": 0.0,
+      "final_avg_battery_pct": 90.0
+    },
+    "leach": {
+      "total_tx": 1081,
+      "data_reduction_pct": 89.99,
+      "rmse": 0.5319,
+      "final_avg_battery_pct": 90.0
+    },
+    "prediction": {
+      "total_tx": 1681,
+      "data_reduction_pct": 84.44,
+      "rmse": 0.231,
+      "final_avg_battery_pct": 98.444
+    },
+    "teen": {
+      "total_tx": 1082,
+      "data_reduction_pct": 89.98,
+      "rmse": 0.1198,
+      "final_avg_battery_pct": 95.444
+    },
+    "proposed": {
+      "total_tx": 1016,
+      "data_reduction_pct": 90.59,
+      "rmse": 0.1655,
+      "final_avg_battery_pct": 99.059
+    }
+  },
+  "radio": {
+    "naive": {
+      "total_tx": 10800,
+      "data_reduction_pct": null,
+      "rmse": 0.0,
+      "final_avg_battery_pct": 98.141
+    },
+    "leach": {
+      "total_tx": 1081,
+      "data_reduction_pct": 89.99,
+      "rmse": 0.5319,
+      "final_avg_battery_pct": 98.837
+    },
+    "prediction": {
+      "total_tx": 1681,
+      "data_reduction_pct": 84.44,
+      "rmse": 0.231,
+      "final_avg_battery_pct": 99.711
+    },
+    "teen": {
+      "total_tx": 1082,
+      "data_reduction_pct": 89.98,
+      "rmse": 0.1198,
+      "final_avg_battery_pct": 99.428
+    },
+    "proposed": {
+      "total_tx": 1017,
+      "data_reduction_pct": 90.58,
+      "rmse": 0.1654,
+      "final_avg_battery_pct": 99.838
+    }
+  }
+}
