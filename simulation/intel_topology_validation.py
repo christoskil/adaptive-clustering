@@ -16,7 +16,8 @@ in the response letter).
 """
 import json
 import numpy as np
-from network import RadioEnergyModel, SimpleEnergyModel, generate_environmental_data
+from network import RadioEnergyModel, SimpleEnergyModel
+from network_v2 import generate_environmental_data_v2
 from proposed_method import run_proposed_method
 from baselines import run_naive, run_leach, run_prediction, run_teen, run_compressed_sensing
 
@@ -29,7 +30,7 @@ positions = np.array(positions)  # 54 nodes, real office coordinates in meters
 
 n_nodes = positions.shape[0]
 n_steps = 200
-data, _ = generate_environmental_data(n_nodes, n_steps, seed=42)
+data, _ = generate_environmental_data_v2(n_nodes, n_steps, positions, seed=42)
 
 simple_model = SimpleEnergyModel(pct_per_tx=0.05)
 radio_model = RadioEnergyModel()
@@ -41,7 +42,7 @@ for model_type, model in [("simple", simple_model), ("radio", radio_model)]:
     r["leach"] = run_leach(data, positions, model, model_type, n_steps=n_steps, seed=1)
     r["prediction"] = run_prediction(data, positions, model, model_type, n_steps=n_steps)
     r["teen"] = run_teen(data, positions, model, model_type, n_steps=n_steps, seed=2)
-    r["proposed"] = run_proposed_method(data, positions, model, model_type, n_steps=n_steps)
+    r["proposed"] = run_proposed_method(data, positions, model, model_type, n_steps=n_steps, enable_merge=True)
 
     base_tx = r["naive"]["total_tx"]
     out[model_type] = {

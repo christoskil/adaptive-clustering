@@ -11,47 +11,47 @@
     "leach": {
       "total_tx": 2001,
       "data_reduction_pct": 89.995,
-      "rmse": 1.9235,
+      "rmse": 2.2582,
       "final_avg_battery_pct": 90.0,
       "battery_variance": 0.0,
       "depletion_step": null
     },
     "prediction": {
-      "total_tx": 3087,
-      "data_reduction_pct": 84.565,
-      "rmse": 0.2296,
-      "final_avg_battery_pct": 98.457,
-      "battery_variance": 0.04723,
+      "total_tx": 1953,
+      "data_reduction_pct": 90.235,
+      "rmse": 0.2251,
+      "final_avg_battery_pct": 99.024,
+      "battery_variance": 0.03912,
       "depletion_step": null
     },
     "proposed": {
-      "total_tx": 1757,
-      "data_reduction_pct": 91.215,
-      "rmse": 0.1723,
-      "final_avg_battery_pct": 99.122,
-      "battery_variance": 1.12196,
+      "total_tx": 1633,
+      "data_reduction_pct": 91.835,
+      "rmse": 0.3706,
+      "final_avg_battery_pct": 99.184,
+      "battery_variance": 0.9438,
       "depletion_step": null
     },
     "teen": {
       "total_tx": 2001,
       "data_reduction_pct": 89.995,
-      "rmse": 0.121,
-      "final_avg_battery_pct": 95.477,
-      "battery_variance": 0.10227,
+      "rmse": 0.1263,
+      "final_avg_battery_pct": 96.108,
+      "battery_variance": 0.09844,
       "depletion_step": null
     },
     "apteen": {
       "total_tx": 2002,
       "data_reduction_pct": 89.99000000000001,
-      "rmse": 0.1205,
-      "final_avg_battery_pct": 95.457,
-      "battery_variance": 0.09388,
+      "rmse": 0.126,
+      "final_avg_battery_pct": 96.101,
+      "battery_variance": 0.08295,
       "depletion_step": null
     },
     "compressed_sensing": {
       "total_tx": 3000,
       "data_reduction_pct": 85.0,
-      "rmse": 2.1707,
+      "rmse": 2.5537,
       "final_avg_battery_pct": 98.5,
       "battery_variance": 0.066,
       "depletion_step": null
@@ -69,47 +69,47 @@
     "leach": {
       "total_tx": 2001,
       "data_reduction_pct": 89.995,
-      "rmse": 1.9235,
+      "rmse": 2.2582,
       "final_avg_battery_pct": 92.149,
       "battery_variance": 17.44665,
       "depletion_step": null
     },
     "prediction": {
-      "total_tx": 3087,
-      "data_reduction_pct": 84.565,
-      "rmse": 0.2296,
-      "final_avg_battery_pct": 98.361,
-      "battery_variance": 1.3618,
+      "total_tx": 1953,
+      "data_reduction_pct": 90.235,
+      "rmse": 0.2251,
+      "final_avg_battery_pct": 98.972,
+      "battery_variance": 0.49603,
       "depletion_step": null
     },
     "proposed": {
-      "total_tx": 1758,
-      "data_reduction_pct": 91.21000000000001,
-      "rmse": 0.1722,
-      "final_avg_battery_pct": 99.497,
-      "battery_variance": 0.14174,
+      "total_tx": 1634,
+      "data_reduction_pct": 91.83,
+      "rmse": 0.3706,
+      "final_avg_battery_pct": 99.413,
+      "battery_variance": 0.79231,
       "depletion_step": null
     },
     "teen": {
       "total_tx": 2001,
       "data_reduction_pct": 89.995,
-      "rmse": 0.121,
-      "final_avg_battery_pct": 95.897,
-      "battery_variance": 4.89438,
+      "rmse": 0.1263,
+      "final_avg_battery_pct": 96.4,
+      "battery_variance": 4.05549,
       "depletion_step": null
     },
     "apteen": {
       "total_tx": 2002,
       "data_reduction_pct": 89.99000000000001,
-      "rmse": 0.1205,
-      "final_avg_battery_pct": 96.18,
-      "battery_variance": 4.42355,
+      "rmse": 0.126,
+      "final_avg_battery_pct": 96.649,
+      "battery_variance": 3.29479,
       "depletion_step": null
     },
     "compressed_sensing": {
       "total_tx": 3000,
       "data_reduction_pct": 85.0,
-      "rmse": 2.1707,
+      "rmse": 2.5537,
       "final_avg_battery_pct": 98.445,
       "battery_variance": 1.05409,
       "depletion_step": null
@@ -127,25 +127,25 @@
     "leach": {
       "total_tx": 20026,
       "data_reduction_pct": 89.987,
-      "rmse": 1.9325,
+      "rmse": 2.3896,
       "final_avg_battery_pct": 0.0,
       "battery_variance": 0.0,
       "depletion_step": null
     },
     "prediction": {
-      "total_tx": 31118,
-      "data_reduction_pct": 84.441,
-      "rmse": 0.2306,
-      "final_avg_battery_pct": 84.441,
-      "battery_variance": 0.36567,
+      "total_tx": 19106,
+      "data_reduction_pct": 90.447,
+      "rmse": 0.2274,
+      "final_avg_battery_pct": 90.447,
+      "battery_variance": 0.31829,
       "depletion_step": null
     },
     "proposed": {
-      "total_tx": 17040,
-      "data_reduction_pct": 91.48,
-      "rmse": 0.1633,
-      "final_avg_battery_pct": 91.48,
-      "battery_variance": 117.83175,
+      "total_tx": 16274,
+      "data_reduction_pct": 91.863,
+      "rmse": 0.3763,
+      "final_avg_battery_pct": 91.863,
+      "battery_variance": 96.45733,
       "depletion_step": null
     }
   },
@@ -161,26 +161,126 @@
     "leach": {
       "total_tx": 18462,
       "data_reduction_pct": 90.769,
-      "rmse": 1.8646,
+      "rmse": 2.2789,
       "final_avg_battery_pct": 30.23,
       "battery_variance": 638.75063,
       "depletion_step": 867
     },
     "prediction": {
-      "total_tx": 31118,
-      "data_reduction_pct": 84.441,
-      "rmse": 0.2306,
-      "final_avg_battery_pct": 83.48,
-      "battery_variance": 123.23225,
+      "total_tx": 19106,
+      "data_reduction_pct": 90.447,
+      "rmse": 0.2274,
+      "final_avg_battery_pct": 89.797,
+      "battery_variance": 50.35276,
       "depletion_step": null
     },
     "proposed": {
-      "total_tx": 17169,
-      "data_reduction_pct": 91.41550000000001,
-      "rmse": 0.1631,
-      "final_avg_battery_pct": 95.325,
-      "battery_variance": 16.95453,
+      "total_tx": 16285,
+      "data_reduction_pct": 91.8575,
+      "rmse": 0.3762,
+      "final_avg_battery_pct": 93.748,
+      "battery_variance": 55.5478,
       "depletion_step": null
+    }
+  },
+  "table1_multiseed_simple_10seeds": {
+    "leach": {
+      "reduction_mean": 89.99,
+      "reduction_std": 0.005,
+      "rmse_mean": 2.2976,
+      "rmse_std": 0.0829,
+      "battery_mean": 90.0,
+      "battery_std": 0.0
+    },
+    "prediction": {
+      "reduction_mean": 90.359,
+      "reduction_std": 0.274,
+      "rmse_mean": 0.2268,
+      "rmse_std": 0.001,
+      "battery_mean": 99.036,
+      "battery_std": 0.027
+    },
+    "teen": {
+      "reduction_mean": 89.989,
+      "reduction_std": 0.004,
+      "rmse_mean": 0.126,
+      "rmse_std": 0.0006,
+      "battery_mean": 96.116,
+      "battery_std": 0.025
+    },
+    "apteen": {
+      "reduction_mean": 89.992,
+      "reduction_std": 0.006,
+      "rmse_mean": 0.1261,
+      "rmse_std": 0.0005,
+      "battery_mean": 96.117,
+      "battery_std": 0.026
+    },
+    "compressed_sensing": {
+      "reduction_mean": 85.0,
+      "reduction_std": 0.0,
+      "rmse_mean": 2.5114,
+      "rmse_std": 0.0973,
+      "battery_mean": 98.5,
+      "battery_std": 0.0
+    },
+    "proposed": {
+      "reduction_mean": 91.373,
+      "reduction_std": 0.545,
+      "rmse_mean": 0.3697,
+      "rmse_std": 0.0076,
+      "battery_mean": 99.137,
+      "battery_std": 0.054
+    }
+  },
+  "table1_multiseed_radio_10seeds": {
+    "leach": {
+      "reduction_mean": 89.99,
+      "reduction_std": 0.005,
+      "rmse_mean": 2.2976,
+      "rmse_std": 0.0829,
+      "battery_mean": 93.116,
+      "battery_std": 0.547
+    },
+    "prediction": {
+      "reduction_mean": 90.359,
+      "reduction_std": 0.274,
+      "rmse_mean": 0.2268,
+      "rmse_std": 0.001,
+      "battery_mean": 99.093,
+      "battery_std": 0.052
+    },
+    "teen": {
+      "reduction_mean": 89.989,
+      "reduction_std": 0.004,
+      "rmse_mean": 0.126,
+      "rmse_std": 0.0006,
+      "battery_mean": 97.171,
+      "battery_std": 0.246
+    },
+    "apteen": {
+      "reduction_mean": 89.992,
+      "reduction_std": 0.006,
+      "rmse_mean": 0.1261,
+      "rmse_std": 0.0005,
+      "battery_mean": 97.193,
+      "battery_std": 0.215
+    },
+    "compressed_sensing": {
+      "reduction_mean": 85.0,
+      "reduction_std": 0.0,
+      "rmse_mean": 2.5114,
+      "rmse_std": 0.0973,
+      "battery_mean": 98.585,
+      "battery_std": 0.081
+    },
+    "proposed": {
+      "reduction_mean": 91.373,
+      "reduction_std": 0.544,
+      "rmse_mean": 0.3697,
+      "rmse_std": 0.0077,
+      "battery_mean": 99.452,
+      "battery_std": 0.091
     }
   }
 }

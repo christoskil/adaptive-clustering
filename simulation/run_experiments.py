@@ -1,6 +1,7 @@
 import json
 import numpy as np
-from network import RadioEnergyModel, SimpleEnergyModel, generate_rgg_topology, generate_environmental_data
+from network import RadioEnergyModel, SimpleEnergyModel, generate_rgg_topology
+from network_v2 import generate_environmental_data_v2
 from proposed_method import run_proposed_method
 from baselines import run_naive, run_leach, run_prediction, run_teen, run_apteen, run_compressed_sensing
 
@@ -9,13 +10,17 @@ OUT = "/home/claude/repo/results"
 
 def run_all(n_nodes, n_steps, model_type, energy_model, seed=0, include_extra=True):
     positions, side = generate_rgg_topology(n_nodes, seed=seed)
-    data, _ = generate_environmental_data(n_nodes, n_steps, seed=seed)
+    data, _ = generate_environmental_data_v2(n_nodes, n_steps, positions, seed=seed)
 
     results = {}
     results["naive"] = run_naive(data, positions, energy_model, model_type, n_steps)
     results["leach"] = run_leach(data, positions, energy_model, model_type, n_steps=n_steps, seed=seed + 1)
     results["prediction"] = run_prediction(data, positions, energy_model, model_type, n_steps=n_steps)
-    results["proposed"] = run_proposed_method(data, positions, energy_model, model_type, n_steps=n_steps)
+    # Official configuration: delta_micro = 0.8 (unchanged from the original
+    # submission) WITH cluster merging enabled (Sect. 4.1 cluster-lifecycle
+    # behaviour, previously described but not implemented in Algorithm 1).
+    results["proposed"] = run_proposed_method(data, positions, energy_model, model_type, n_steps=n_steps,
+                                               enable_merge=True)
     if include_extra:
         results["teen"] = run_teen(data, positions, energy_model, model_type, n_steps=n_steps, seed=seed + 2)
         results["apteen"] = run_apteen(data, positions, energy_model, model_type, n_steps=n_steps, seed=seed + 4)
@@ -36,6 +41,33 @@ def summarize(results, baseline_key="naive"):
             "final_avg_battery_pct": round(r["final_avg_battery_pct"], 3),
             "battery_variance": round(r["battery_variance"], 5),
             "depletion_step": r["depletion_step"],
+        }
+    return summary
+
+
+def run_multiseed_summary(n_nodes, n_steps, model_type, model_factory, n_seeds=10, base_seed=3, seed_stride=17):
+    """Mean +/- std over n_seeds independent topologies/datasets -- the
+    headline numbers used in the revised manuscript, since a single seed
+    was found not to be statistically robust (see response to reviewers)."""
+    per_method = {m: {"reduction": [], "rmse": [], "battery": []}
+                  for m in ["leach", "prediction", "teen", "apteen", "compressed_sensing", "proposed"]}
+    for i in range(n_seeds):
+        seed = base_seed + i * seed_stride
+        res = run_all(n_nodes, n_steps, model_type, model_factory(), seed=seed, include_extra=True)
+        base_tx = res["naive"]["total_tx"]
+        for m in per_method:
+            per_method[m]["reduction"].append((1 - res[m]["total_tx"] / base_tx) * 100)
+            per_method[m]["rmse"].append(res[m]["rmse"])
+            per_method[m]["battery"].append(res[m]["final_avg_battery_pct"])
+    summary = {}
+    for m, vals in per_method.items():
+        summary[m] = {
+            "reduction_mean": round(float(np.mean(vals["reduction"])), 3),
+            "reduction_std": round(float(np.std(vals["reduction"])), 3),
+            "rmse_mean": round(float(np.mean(vals["rmse"])), 4),
+            "rmse_std": round(float(np.std(vals["rmse"])), 4),
+            "battery_mean": round(float(np.mean(vals["battery"])), 3),
+            "battery_std": round(float(np.std(vals["battery"])), 3),
         }
     return summary
 
@@ -63,6 +95,15 @@ if __name__ == "__main__":
 
     res_long_radio = run_all(100, 2000, "radio", RadioEnergyModel(), seed=0, include_extra=False)
     all_out["long_run_radio_model_100n_2000t"] = summarize(res_long_radio)
+
+    # --- Experiment D: the DEFINITIVE headline numbers -- mean +/- std over
+    #     10 independent seeds, both energy models. A single seed (A/B
+    #     above) was found not to be statistically robust; this is what the
+    #     revised manuscript's Table 1 should report. ---
+    all_out["table1_multiseed_simple_10seeds"] = run_multiseed_summary(
+        100, 200, "simple", lambda: SimpleEnergyModel(pct_per_tx=0.05))
+    all_out["table1_multiseed_radio_10seeds"] = run_multiseed_summary(
+        100, 200, "radio", lambda: RadioEnergyModel())
 
     with open(f"{OUT}/experiment_results.json", "w") as f:
         json.dump(all_out, f, indent=2)

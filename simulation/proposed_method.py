@@ -20,11 +20,75 @@ class MicroCluster:
         self.history = {}  # node -> count of recent transmissions
 
 
+def _merge_micro_clusters(clusters, delta_micro):
+    """Merge active micro-clusters whose centroids have converged to within
+    delta_micro of each other. The manuscript's Sect. 4.1 explicitly states
+    cluster lifecycle includes merging ("If the centroids of the clusters
+    are moving closer, the clusters are automatically merged") but the
+    literal Algorithm 1 pseudocode only ever creates new clusters and never
+    merges existing ones; this closes that gap. Returns the merged cluster
+    list and a mapping from old cluster index -> new cluster index."""
+    order = sorted(range(len(clusters)), key=lambda i: clusters[i].centroid)
+    merged = []
+    mapping = {}
+    i = 0
+    while i < len(order):
+        idx = order[i]
+        c = clusters[idx]
+        members = set(c.members)
+        weight = len(c.members)
+        weighted_centroid = c.centroid * weight
+        last_tx = c.last_tx_step
+        group = [idx]
+        j = i + 1
+        while j < len(order):
+            idx2 = order[j]
+            c2 = clusters[idx2]
+            current_centroid = weighted_centroid / weight
+            if abs(c2.centroid - current_centroid) <= delta_micro:
+                members |= c2.members
+                w2 = len(c2.members)
+                weighted_centroid += c2.centroid * w2
+                weight += w2
+                last_tx = max(last_tx, c2.last_tx_step)
+                group.append(idx2)
+                j += 1
+            else:
+                break
+        new_idx = len(merged)
+        new_c = MicroCluster(weighted_centroid / weight, next(iter(members)))
+        new_c.members = members
+        new_c.last_tx_step = last_tx
+        merged.append(new_c)
+        for g in group:
+            mapping[g] = new_idx
+        i = j
+    return merged, mapping
+
+
 def run_proposed_method(data, positions, energy_model, model_type="simple",
                          delta_micro=0.8, delta_meso=2.5, delta_macro=5.0,
                          beta=0.3, weights=(0.4, 0.3, 0.2, 0.1),
                          t_inactive=10, history_window=10, decay_lambda=5.0,
-                         n_steps=None):
+                         n_steps=None, adaptive_k=None, adaptive_meso_ratio=3.125,
+                         adaptive_macro_ratio=6.25, adaptive_min_delta=0.05,
+                         enable_merge=False):
+    """
+    adaptive_k: if set (not None), delta_micro is recomputed at every time
+    step as adaptive_k * robust_std(first differences of readings), where
+    the robust std is a MAD-based estimate of the pooled per-node
+    step-to-step innovation. This targets the *sensor-noise* scale rather
+    than the *signal* scale (slow spatial/microclimate structure is mostly
+    removed by differencing), so the tolerance shrinks on calm/clean data
+    and widens on noisy data instead of being a single fixed value tuned to
+    one dataset. When None, the original fixed delta_micro is used
+    (backward compatible with the original submission).
+
+    enable_merge: if True, adds the cluster-merging step described in the
+    manuscript's Sect. 4.1 cluster-lifecycle text but absent from the
+    literal Algorithm 1 pseudocode: after formation, any micro-clusters
+    whose centroids have converged to within delta_micro are merged.
+    """
     n_nodes, total_steps = data.shape
     if n_steps is None:
         n_steps = total_steps
@@ -39,9 +103,21 @@ def run_proposed_method(data, positions, energy_model, model_type="simple",
     battery_trace = []
     n_clusters_trace = []
     depletion_step = None
+    delta_micro_trace = []
 
     for t in range(n_steps):
         readings = data[:, t]
+
+        if adaptive_k is not None:
+            prev_readings = data[:, t - 1] if t > 0 else readings
+            diffs = readings - prev_readings
+            med = np.median(diffs)
+            mad = np.median(np.abs(diffs - med))
+            robust_std = 1.4826 * mad
+            delta_micro = max(adaptive_k * robust_std, adaptive_min_delta)
+            delta_meso = delta_micro * adaptive_meso_ratio
+            delta_macro = delta_micro * adaptive_macro_ratio
+        delta_micro_trace.append(delta_micro)
 
         # --- Phase 1: adaptive cluster formation (Algorithm 1) ---
         node_cluster_idx = np.full(n_nodes, -1, dtype=int)
@@ -60,6 +136,12 @@ def run_proposed_method(data, positions, energy_model, model_type="simple",
             else:
                 clusters.append(MicroCluster(readings[i], i))
                 node_cluster_idx[i] = len(clusters) - 1
+
+        # --- Phase 1b (optional): merge micro-clusters whose centroids
+        #     have converged to within delta_micro (see enable_merge docstring) ---
+        if enable_merge and len(clusters) > 1:
+            clusters, merge_map = _merge_micro_clusters(clusters, delta_micro)
+            node_cluster_idx = np.array([merge_map[idx] for idx in node_cluster_idx])
 
         # --- Phase 2: hierarchical aggregation (meso/macro, for
         #     reconstruction fallback only; representative selection stays
@@ -173,4 +255,5 @@ def run_proposed_method(data, positions, energy_model, model_type="simple",
         "n_clusters_trace": n_clusters_trace,
         "avg_clusters": float(np.mean(n_clusters_trace[len(n_clusters_trace)//2:])),
         "depletion_step": depletion_step,
+        "delta_micro_trace": delta_micro_trace,
     }

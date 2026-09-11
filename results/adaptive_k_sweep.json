@@ -1,0 +1,87 @@
+{
+  "leach_reduction_mean": 89.98800000000001,
+  "teen_reduction_mean": 89.98800000000001,
+  "teen_rmse_mean": 0.12636236063416664,
+  "sweep": {
+    "0.5": {
+      "reduction_mean": 85.926,
+      "reduction_std": 0.575,
+      "rmse_mean": 0.0315,
+      "rmse_std": 0.0006,
+      "battery_mean": 98.814,
+      "avg_delta_micro": 0.13
+    },
+    "1.0": {
+      "reduction_mean": 82.925,
+      "reduction_std": 0.65,
+      "rmse_mean": 0.0504,
+      "rmse_std": 0.0022,
+      "battery_mean": 98.681,
+      "avg_delta_micro": 0.261
+    },
+    "1.5": {
+      "reduction_mean": 80.056,
+      "reduction_std": 1.019,
+      "rmse_mean": 0.067,
+      "rmse_std": 0.003,
+      "battery_mean": 98.559,
+      "avg_delta_micro": 0.391
+    },
+    "2.0": {
+      "reduction_mean": 78.466,
+      "reduction_std": 1.161,
+      "rmse_mean": 0.0826,
+      "rmse_std": 0.0042,
+      "battery_mean": 98.506,
+      "avg_delta_micro": 0.521
+    },
+    "3.0": {
+      "reduction_mean": 75.946,
+      "reduction_std": 1.23,
+      "rmse_mean": 0.1065,
+      "rmse_std": 0.0046,
+      "battery_mean": 98.422,
+      "avg_delta_micro": 0.781
+    },
+    "4.0": {
+      "reduction_mean": 74.19,
+      "reduction_std": 1.334,
+      "rmse_mean": 0.1232,
+      "rmse_std": 0.0064,
+      "battery_mean": 98.382,
+      "avg_delta_micro": 1.042
+    },
+    "6.0": {
+      "reduction_mean": 72.976,
+      "reduction_std": 1.653,
+      "rmse_mean": 0.1369,
+      "rmse_std": 0.0097,
+      "battery_mean": 98.387,
+      "avg_delta_micro": 1.562
+    },
+    "8.0": {
+      "reduction_mean": 73.497,
+      "reduction_std": 1.536,
+      "rmse_mean": 0.138,
+      "rmse_std": 0.0104,
+      "battery_mean": 98.461,
+      "avg_delta_micro": 2.083
+    },
+    "10.0": {
+      "reduction_mean": 74.418,
+      "reduction_std": 1.511,
+      "rmse_mean": 0.1377,
+      "rmse_std": 0.0105,
+      "battery_mean": 98.553,
+      "avg_delta_micro": 2.604
+    },
+    "15.0": {
+      "reduction_mean": 76.082,
+      "reduction_std": 1.378,
+      "rmse_mean": 0.1369,
+      "rmse_std": 0.0104,
+      "battery_mean": 98.71,
+      "avg_delta_micro": 3.906
+    }
+  }
+}

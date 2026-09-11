@@ -1,0 +1,70 @@
+{
+  "leach_reduction_mean": 89.98800000000001,
+  "teen_reduction_mean": 89.98800000000001,
+  "teen_rmse_mean": 0.12636236063416664,
+  "sweep": {
+    "0.3": {
+      "reduction_mean": 83.389,
+      "reduction_std": 0.586,
+      "rmse_mean": 0.1202,
+      "rmse_std": 0.0008,
+      "battery_mean": 98.788
+    },
+    "0.5": {
+      "reduction_mean": 87.943,
+      "reduction_std": 0.275,
+      "rmse_mean": 0.2203,
+      "rmse_std": 0.0023,
+      "battery_mean": 99.208
+    },
+    "0.8": {
+      "reduction_mean": 91.557,
+      "reduction_std": 0.419,
+      "rmse_mean": 0.3708,
+      "rmse_std": 0.0079,
+      "battery_mean": 99.502
+    },
+    "1.0": {
+      "reduction_mean": 93.162,
+      "reduction_std": 0.377,
+      "rmse_mean": 0.4823,
+      "rmse_std": 0.0094,
+      "battery_mean": 99.612
+    },
+    "1.2": {
+      "reduction_mean": 94.336,
+      "reduction_std": 0.321,
+      "rmse_mean": 0.5865,
+      "rmse_std": 0.0306,
+      "battery_mean": 99.705
+    },
+    "1.5": {
+      "reduction_mean": 95.362,
+      "reduction_std": 0.337,
+      "rmse_mean": 0.7462,
+      "rmse_std": 0.0511,
+      "battery_mean": 99.777
+    },
+    "2.0": {
+      "reduction_mean": 96.658,
+      "reduction_std": 0.376,
+      "rmse_mean": 1.0714,
+      "rmse_std": 0.034,
+      "battery_mean": 99.86
+    },
+    "2.5": {
+      "reduction_mean": 97.426,
+      "reduction_std": 0.251,
+      "rmse_mean": 1.3709,
+      "rmse_std": 0.0451,
+      "battery_mean": 99.901
+    },
+    "3.0": {
+      "reduction_mean": 97.875,
+      "reduction_std": 0.121,
+      "rmse_mean": 1.643,
+      "rmse_std": 0.1045,
+      "battery_mean": 99.927
+    }
+  }
+}

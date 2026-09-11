@@ -9,26 +9,26 @@
     "leach": {
       "total_tx": 1081,
       "data_reduction_pct": 89.99,
-      "rmse": 0.5319,
+      "rmse": 2.2379,
       "final_avg_battery_pct": 90.0
     },
     "prediction": {
-      "total_tx": 1681,
-      "data_reduction_pct": 84.44,
-      "rmse": 0.231,
-      "final_avg_battery_pct": 98.444
+      "total_tx": 1228,
+      "data_reduction_pct": 88.63,
+      "rmse": 0.2284,
+      "final_avg_battery_pct": 98.863
     },
     "teen": {
       "total_tx": 1082,
       "data_reduction_pct": 89.98,
-      "rmse": 0.1198,
-      "final_avg_battery_pct": 95.444
+      "rmse": 0.1253,
+      "final_avg_battery_pct": 95.98
     },
     "proposed": {
-      "total_tx": 1016,
-      "data_reduction_pct": 90.59,
-      "rmse": 0.1655,
-      "final_avg_battery_pct": 99.059
+      "total_tx": 1368,
+      "data_reduction_pct": 87.33,
+      "rmse": 0.3357,
+      "final_avg_battery_pct": 98.733
     }
   },
   "radio": {
@@ -41,26 +41,26 @@
     "leach": {
       "total_tx": 1081,
       "data_reduction_pct": 89.99,
-      "rmse": 0.5319,
+      "rmse": 2.2379,
       "final_avg_battery_pct": 98.837
     },
     "prediction": {
-      "total_tx": 1681,
-      "data_reduction_pct": 84.44,
-      "rmse": 0.231,
-      "final_avg_battery_pct": 99.711
+      "total_tx": 1228,
+      "data_reduction_pct": 88.63,
+      "rmse": 0.2284,
+      "final_avg_battery_pct": 99.789
     },
     "teen": {
       "total_tx": 1082,
       "data_reduction_pct": 89.98,
-      "rmse": 0.1198,
-      "final_avg_battery_pct": 99.428
+      "rmse": 0.1253,
+      "final_avg_battery_pct": 99.486
     },
     "proposed": {
-      "total_tx": 1017,
-      "data_reduction_pct": 90.58,
-      "rmse": 0.1654,
-      "final_avg_battery_pct": 99.838
+      "total_tx": 1365,
+      "data_reduction_pct": 87.36,
+      "rmse": 0.3357,
+      "final_avg_battery_pct": 99.774
     }
   }
 }
