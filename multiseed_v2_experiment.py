@@ -1,6 +1,7 @@
 import json
 import numpy as np
-from network import RadioEnergyModel, SimpleEnergyModel, generate_rgg_topology, generate_environmental_data
+from network import RadioEnergyModel, SimpleEnergyModel, generate_rgg_topology
+from network_v2 import generate_environmental_data_v2
 from proposed_method import run_proposed_method
 from baselines import run_naive, run_leach, run_prediction, run_teen, run_apteen, run_compressed_sensing
 
@@ -10,7 +11,7 @@ N_STEPS = 200
 
 def run_one_seed(seed, model_type, energy_model):
     positions, side = generate_rgg_topology(N_NODES, seed=seed)
-    data, _ = generate_environmental_data(N_NODES, N_STEPS, seed=seed)
+    data, _ = generate_environmental_data_v2(N_NODES, N_STEPS, positions, seed=seed)
 
     naive = run_naive(data, positions, energy_model, model_type, N_STEPS)
     leach = run_leach(data, positions, energy_model, model_type, n_steps=N_STEPS, seed=seed + 1)
@@ -42,7 +43,6 @@ for model_type, model_factory in [("simple", lambda: SimpleEnergyModel(pct_per_t
         results[model_type].append(r)
         print(model_type, seed, {k: (round(v[0],2) if isinstance(v, tuple) else v) for k,v in r.items() if k != "naive_battery"})
 
-# Aggregate
 summary = {}
 for model_type in ["simple", "radio"]:
     methods = ["leach", "prediction", "teen", "apteen", "compressed_sensing", "proposed"]
@@ -62,6 +62,6 @@ for model_type in ["simple", "radio"]:
     naive_batt = np.array([r["naive_battery"] for r in results[model_type]])
     summary[model_type]["naive"] = {"battery_mean": round(naive_batt.mean(),3), "battery_std": round(naive_batt.std(),3)}
 
-with open("/home/claude/repo/results/multiseed_results.json", "w") as f:
+with open("/home/christoskil/Downloads/adaptive-clustering/results/multiseed_v2_results.json", "w") as f:
     json.dump(summary, f, indent=2)
 print(json.dumps(summary, indent=2))

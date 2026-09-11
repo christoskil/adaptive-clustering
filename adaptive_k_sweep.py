@@ -52,7 +52,7 @@ for k in K_VALUES:
           f"rmse={sweep[k]['rmse_mean']:.4f}  battery={sweep[k]['battery_mean']:.2f}%  "
           f"(avg delta_micro={sweep[k]['avg_delta_micro']:.3f})")
 
-with open("/home/claude/repo/results/adaptive_k_sweep.json", "w") as f:
+with open("/home/christoskil/Downloads/adaptive-clustering/repo/results/adaptive_k_sweep.json", "w") as f:
     json.dump({"leach_reduction_mean": float(np.mean(leach_red)),
                "teen_reduction_mean": float(np.mean(teen_red)),
                "teen_rmse_mean": float(np.mean(teen_rmse)),

@@ -10,7 +10,7 @@ N_NODES = 100
 N_STEPS = 200
 DELTA_MICROS = [0.3, 0.5, 0.8, 1.0, 1.2, 1.5, 2.0, 2.5, 3.0, 4.0]
 
-# baseline reference (delta-independent), computed once per seed
+
 baseline_stats = {"leach": [], "teen": [], "naive_tx": []}
 cached_data = {}
 for seed in range(N_SEEDS):
@@ -53,6 +53,6 @@ for dm in DELTA_MICROS:
     print(f"delta_micro={dm}: reduction={sweep_results[dm]['reduction_mean']:.2f}±{sweep_results[dm]['reduction_std']:.2f}%  "
           f"rmse={sweep_results[dm]['rmse_mean']:.4f}  battery={sweep_results[dm]['battery_mean']:.2f}%")
 
-with open("/home/claude/repo/results/delta_micro_sweep.json", "w") as f:
+with open("/home/christoskil/Downloads/adaptive-clustering/repo/results/delta_micro_sweep.json", "w") as f:
     json.dump({"leach_reduction_mean": leach_red_mean, "teen_reduction_mean": teen_red_mean,
                "sweep": sweep_results}, f, indent=2)

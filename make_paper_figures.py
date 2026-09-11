@@ -6,8 +6,8 @@ import matplotlib.pyplot as plt
 
 plt.rcParams.update({"font.size": 11, "figure.dpi": 300, "savefig.dpi": 300})
 
-RES = "/home/claude/repo/results"
-OUTDIR = "/home/claude/latex_src"
+RES = "/home/christoskil/Downloads/adaptive-clustering/results"
+OUTDIR = "/home/christoskil/Downloads/adaptive-clustering/latex_src"
 
 with open(f"{RES}/experiment_results.json") as f:
     results = json.load(f)
@@ -69,10 +69,9 @@ plt.tight_layout()
 plt.savefig(f"{OUTDIR}/temporal_performance.png", dpi=300, bbox_inches="tight")
 plt.close()
 
-# ---- tradeoff_curve.png ----
+
 dm_vals = sorted(float(k) for k in sweep["sweep"].keys())
 reduction_vals = [sweep["sweep"][str(dm) if str(dm) in sweep["sweep"] else dm]["reduction_mean"] for dm in dm_vals]
-# json keys are strings already since json.dump used float keys -> strings
 sweep_sweep = {float(k): v for k, v in sweep["sweep"].items()}
 dm_vals = sorted(sweep_sweep.keys())
 reduction_vals = [sweep_sweep[dm]["reduction_mean"] for dm in dm_vals]

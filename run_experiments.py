@@ -5,7 +5,7 @@ from network_v2 import generate_environmental_data_v2
 from proposed_method import run_proposed_method
 from baselines import run_naive, run_leach, run_prediction, run_teen, run_apteen, run_compressed_sensing
 
-OUT = "/home/claude/repo/results"
+OUT = "/home/christoskil/Downloads/adaptive-clustering/results"
 
 
 def run_all(n_nodes, n_steps, model_type, energy_model, seed=0, include_extra=True):
@@ -46,9 +46,6 @@ def summarize(results, baseline_key="naive"):
 
 
 def run_multiseed_summary(n_nodes, n_steps, model_type, model_factory, n_seeds=10, base_seed=3, seed_stride=17):
-    """Mean +/- std over n_seeds independent topologies/datasets -- the
-    headline numbers used in the revised manuscript, since a single seed
-    was found not to be statistically robust (see response to reviewers)."""
     per_method = {m: {"reduction": [], "rmse": [], "battery": []}
                   for m in ["leach", "prediction", "teen", "apteen", "compressed_sensing", "proposed"]}
     for i in range(n_seeds):
