@@ -6,8 +6,8 @@ import matplotlib.pyplot as plt
 
 plt.rcParams.update({"font.size": 11, "figure.dpi": 300, "savefig.dpi": 300})
 
-RES = "/home/claude/repo/results"
-OUTDIR = "/home/claude/latex_src"
+RES = "/home/repo/results"
+OUTDIR = "/home/latex_src"
 
 with open(f"{RES}/experiment_results.json") as f:
     results = json.load(f)
