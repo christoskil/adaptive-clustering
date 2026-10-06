@@ -1,19 +1,4 @@
-"""
-Partial validation on a real-world sensor deployment topology.
 
-The full Intel Berkeley Research Lab readings file (data.txt.gz, ~150MB
-uncompressed) could not be retrieved in this environment (see response to
-Reviewer 1). As an honest partial step, we import the REAL 54-node mote
-layout (mote_locs.txt, from https://db.csail.mit.edu/labdata/labdata.html)
-and run our synthetic-but-realistic environmental generator over that real,
-irregular office topology instead of our own uniformly-random RGG topology.
-This tests whether the method's behaviour (cluster count, data reduction,
-reconstruction accuracy) is sensitive to a genuinely non-uniform, clustered
-real deployment geometry, which is the topological property the reviewer's
-concern is really about; it does NOT substitute for validating against real
-temperature/humidity values, which remains an open item (flagged explicitly
-in the response letter).
-"""
 import json
 import numpy as np
 from network import RadioEnergyModel, SimpleEnergyModel
@@ -22,7 +7,7 @@ from proposed_method import run_proposed_method
 from baselines import run_naive, run_leach, run_prediction, run_teen, run_compressed_sensing
 
 positions = []
-with open("/home/claude/repo/results/intel_lab_mote_locs.txt") as f:
+with open("/home/repo/results/intel_lab_mote_locs.txt") as f:
     for line in f:
         parts = line.split()
         positions.append([float(parts[1]), float(parts[2])])
@@ -54,6 +39,6 @@ for model_type, model in [("simple", simple_model), ("radio", radio_model)]:
         } for k, v in r.items()
     }
 
-with open("/home/claude/repo/results/intel_topology_validation.json", "w") as f:
+with open("/home/repo/results/intel_topology_validation.json", "w") as f:
     json.dump(out, f, indent=2)
 print(json.dumps(out, indent=2))
