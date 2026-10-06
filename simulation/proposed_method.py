@@ -1,12 +1,4 @@
-"""
-Implementation of the Adaptive Multi-Level Clustering method described in
-Kylafas & Kolomvatsos, "Adaptive Multi-Level Clustering with Dynamic
-Representative Selection for Data Redundancy Reduction in IoT Networks".
 
-Implements Algorithm 1 (adaptive cluster formation), Algorithm 2 (distributed
-representative selection), and Algorithm 3 (complete protocol), exactly as
-specified by Eqs. (8)-(19) of the manuscript.
-"""
 import numpy as np
 
 
@@ -21,13 +13,7 @@ class MicroCluster:
 
 
 def _merge_micro_clusters(clusters, delta_micro):
-    """Merge active micro-clusters whose centroids have converged to within
-    delta_micro of each other. The manuscript's Sect. 4.1 explicitly states
-    cluster lifecycle includes merging ("If the centroids of the clusters
-    are moving closer, the clusters are automatically merged") but the
-    literal Algorithm 1 pseudocode only ever creates new clusters and never
-    merges existing ones; this closes that gap. Returns the merged cluster
-    list and a mapping from old cluster index -> new cluster index."""
+
     order = sorted(range(len(clusters)), key=lambda i: clusters[i].centroid)
     merged = []
     mapping = {}
@@ -73,22 +59,7 @@ def run_proposed_method(data, positions, energy_model, model_type="simple",
                          n_steps=None, adaptive_k=None, adaptive_meso_ratio=3.125,
                          adaptive_macro_ratio=6.25, adaptive_min_delta=0.05,
                          enable_merge=False):
-    """
-    adaptive_k: if set (not None), delta_micro is recomputed at every time
-    step as adaptive_k * robust_std(first differences of readings), where
-    the robust std is a MAD-based estimate of the pooled per-node
-    step-to-step innovation. This targets the *sensor-noise* scale rather
-    than the *signal* scale (slow spatial/microclimate structure is mostly
-    removed by differencing), so the tolerance shrinks on calm/clean data
-    and widens on noisy data instead of being a single fixed value tuned to
-    one dataset. When None, the original fixed delta_micro is used
-    (backward compatible with the original submission).
 
-    enable_merge: if True, adds the cluster-merging step described in the
-    manuscript's Sect. 4.1 cluster-lifecycle text but absent from the
-    literal Algorithm 1 pseudocode: after formation, any micro-clusters
-    whose centroids have converged to within delta_micro are merged.
-    """
     n_nodes, total_steps = data.shape
     if n_steps is None:
         n_steps = total_steps
@@ -137,15 +108,11 @@ def run_proposed_method(data, positions, energy_model, model_type="simple",
                 clusters.append(MicroCluster(readings[i], i))
                 node_cluster_idx[i] = len(clusters) - 1
 
-        # --- Phase 1b (optional): merge micro-clusters whose centroids
-        #     have converged to within delta_micro (see enable_merge docstring) ---
         if enable_merge and len(clusters) > 1:
             clusters, merge_map = _merge_micro_clusters(clusters, delta_micro)
             node_cluster_idx = np.array([merge_map[idx] for idx in node_cluster_idx])
 
-        # --- Phase 2: hierarchical aggregation (meso/macro, for
-        #     reconstruction fallback only; representative selection stays
-        #     at micro level as specified) ---
+
         centroids = np.array([c.centroid for c in clusters])
         meso_id = np.full(len(clusters), -1, dtype=int)
         next_meso = 0
@@ -165,7 +132,7 @@ def run_proposed_method(data, positions, energy_model, model_type="simple",
             cents = np.array([clusters[ci].centroid for ci in members])
             meso_centroid[m] = float(np.average(cents, weights=sizes))
 
-        # --- Phase 3: distributed representative selection (Algorithm 2) ---
+
         transmitting = set()
         active_cluster_ids = sorted(set(node_cluster_idx.tolist()))
         for ci in active_cluster_ids:
@@ -193,14 +160,12 @@ def run_proposed_method(data, positions, energy_model, model_type="simple",
             rep = members[int(np.argmax(probs))]
             transmitting.add(rep)
 
-        # --- Phase 4: transmission & energy update ---
+
         for node in transmitting:
             if model_type == "simple":
                 battery[node] -= energy_model.tx_cost_pct()
             else:
-                # distance to base station assumed at field centroid-top;
-                # approximate with distance to farthest field corner as a
-                # conservative multi-hop-free estimate
+
                 dist_to_bs = np.linalg.norm(positions[node] - positions.mean(axis=0)) + 50.0
                 e_tx = energy_model.tx_energy(dist_to_bs)
                 battery[node] -= e_tx
@@ -212,7 +177,6 @@ def run_proposed_method(data, positions, energy_model, model_type="simple",
             tx_history[node, tx_ptr] = 1
         tx_ptr = (tx_ptr + 1) % history_window
 
-        # --- Phase 5: reconstruction at base station ---
         sq_err = 0.0
         for i in range(n_nodes):
             if i in transmitting:
@@ -230,7 +194,7 @@ def run_proposed_method(data, positions, energy_model, model_type="simple",
         mse = sq_err / n_nodes
         reconstruction_sq_errors.append(mse)
 
-        # --- Phase 6: cluster maintenance ---
+
         clusters = [c for c in clusters if (t - c.last_tx_step) <= t_inactive or c.last_tx_step == t]
 
         avg_batt = battery.mean() if model_type == "simple" else 100.0 * battery.mean() / energy_model.e_initial
