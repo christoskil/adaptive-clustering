@@ -1,12 +1,4 @@
-"""
-Sensitivity analysis requested by Editor comment #18: does the proposed
-method retain its data-reduction/RMSE advantage as the position-independent
-microclimate component (network_v2.py's microclimate_amplitude) is reduced
-or removed? Removing it entirely collapses the paper's central hypothesis
-by construction (no value-based, spatially-independent redundancy remains
-to exploit), so we sweep it from 0 (removed) to 2x the default (3.0) and
-report the trend rather than a single pass/fail point.
-"""
+
 import json
 import numpy as np
 from network import RadioEnergyModel, generate_rgg_topology
@@ -41,5 +33,5 @@ for amp in [0.0, 1.0, 1.5, 3.0, 4.5, 6.0]:
     print(f"microclimate_amplitude={amp}: ours reduction={np.mean(reds):.2f}+-{np.std(reds):.2f}%  "
           f"rmse={np.mean(rmses):.3f}  LEACH reduction={np.mean(leach_reds):.2f}%")
 
-with open("/home/claude/repo/results/sensitivity_microclimate.json", "w") as f:
+with open("/home/repo/results/sensitivity_microclimate.json", "w") as f:
     json.dump(results, f, indent=2)
