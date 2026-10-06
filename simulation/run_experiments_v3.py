@@ -16,10 +16,7 @@ def run_one_seed(seed, model_type, energy_model):
     raw_data, _ = generate_environmental_data_v2(N_NODES, N_STEPS, positions, seed=seed)
     norm_data, dm, dme, dma, mean, std = normalize_data(raw_data, DELTA_MICRO, DELTA_MESO, DELTA_MACRO)
 
-    # Baselines operate on RAW data with their own, independently-published
-    # thresholds (normalization is specific to how this method's
-    # Delta_micro/meso/macro are interpreted, Sect. 5.1) -- see
-    # proposed_method_v3.run_proposed_method docstring.
+
     naive = run_naive(raw_data, positions, energy_model, model_type, N_STEPS)
     leach = run_leach(raw_data, positions, energy_model, model_type, n_steps=N_STEPS, seed=seed + 1)
     pred = run_prediction(raw_data, positions, energy_model, model_type, n_steps=N_STEPS)
@@ -73,6 +70,6 @@ if __name__ == "__main__":
         naive_batt = np.array([r["naive_battery"] for r in results[model_type]])
         summary[model_type]["naive"] = {"battery_mean": round(naive_batt.mean(), 3), "battery_std": round(naive_batt.std(), 3)}
 
-    with open("/home/claude/repo/results/table1_v3_final.json", "w") as f:
+    with open("/home/repo/results/table1_v3_final.json", "w") as f:
         json.dump(summary, f, indent=2)
     print(json.dumps(summary, indent=2))
