@@ -1,79 +1,7 @@
-"""
-Faithful implementation of the Adaptive Multi-Level Clustering method
-described in Kylafas & Kolomvatsos, "Adaptive Multi-Level Clustering with
-Dynamic Representative Selection for Data Redundancy Reduction in IoT
-Networks".
 
-This is a rewrite prepared in response to the Editor's code-audit comments
-(25 points, second revision round). Unlike the previous reference
-implementation, this version implements every mechanism the manuscript
-describes rather than a simplified subset. A line-by-line mapping to the
-manuscript's Algorithms 1-3 and Eqs. (8)-(20) is maintained in
-MAPPING.md in this repository.
-
-Key differences from the previous version, each tied to a specific
-Editor comment (E#):
-  E1/E2  - Micro-cluster membership is now recomputed fresh every time
-           step from current readings only; no stale carryover.
-  E3/E4  - A real macro level is implemented: macro-clusters aggregate
-           meso-clusters, with their own centroids and periodic summary
-           reports.
-  E5     - enable_merge is still a parameter (kept for the ablation the
-           first revision documented), but the default reported
-           configuration is enable_merge=True everywhere.
-  E6     - Cluster splitting is implemented: a micro-cluster whose
-           current-member variance exceeds a threshold is split via a
-           median split of current member values.
-  E7     - Adaptive reporting frequency: meso/macro summary reports are
-           throttled by a per-cluster stability counter, not sent every
-           step.
-  E8     - Delta encoding: a micro-representative report costs a small
-           packet if its value is close to the last value that
-           representative's cluster identity reported, else a full
-           packet.
-  E9/E10 - Eq. (20) inverse-distance spatial interpolation is now the
-           literal final fallback, used only when neither the node's
-           current micro-cluster nor its meso/macro aggregate had any
-           representative transmit this step (which the probabilistic
-           mechanism, E11, makes a real, non-degenerate case).
-  E11    - Representative "selection" is now genuinely probabilistic
-           (Eq. 16-17): each node draws an independent Bernoulli trial at
-           its own p_i(t), used directly (p_i(t) already sums to 1 over
-           the cluster by construction, so this gives an expected ~1
-           transmitter per cluster while still allowing 0 or >1).
-  E12/13/14 - Local information (spatial centroid, battery, history) is
-           computed only from members within radio range r_c of each
-           other (approximated via the network's connectivity graph);
-           knowledge of far, value-similar clusters propagates only
-           through an explicit base-station downlink broadcast, which
-           is the concrete mechanism for how spatially distant nodes
-           learn of each other's value clusters.
-  E20    - The base station is placed at an explicit, fixed location
-           (north of the field, matching Fig. 1), shared with every
-           baseline via baselines.base_station_position, rather than an
-           unexplained "+50" offset.
-  E21    - Reception energy (Eq. 7's E_rx) is now actually charged: every
-           node pays a small E_rx once per step for receiving the
-           base-station downlink beacon.
-  E22    - Packet size varies by message type (micro full report, delta
-           report, meso/macro summary) rather than one constant.
-  E23    - The cluster-inactivity timer is now keyed to the last time a
-           REPRESENTATIVE of that cluster actually transmitted, not the
-           last time any node was momentarily assigned to it.
-"""
 import numpy as np
 from baselines import base_station_position
 
-# Packet sizes in bits, used with the radio energy model (E22). A "full"
-# micro report and a meso/macro summary are each a single packet with
-# comparable header/payload structure (centroid + a handful of aggregate
-# fields); a meso/macro summary is coarser, not richer, than a full micro
-# report, so it is NOT modeled as larger. All methods' baseline packets
-# (naive, LEACH, TEEN, APTEEN, prediction, compressed sensing) already use
-# the same 2000-bit default (network.RadioEnergyModel.packet_bits), so
-# FULL_REPORT_BITS matches that for a fair, apples-to-apples comparison;
-# only the delta-encoded and beacon messages, which are genuinely smaller
-# payloads by construction, get a smaller size.
 FULL_REPORT_BITS = 2000       # micro representative full report (value, centroid, variance, member ids)
 DELTA_REPORT_BITS = 200       # micro representative delta-encoded report (E8): header + small delta value only
 MESO_SUMMARY_BITS = 2000      # meso representative summary report (coarser, not richer, than a micro report)
@@ -87,9 +15,6 @@ MAX_REPORT_INTERVAL = 8               # cap on how infrequently a stable meso/ma
 
 
 class ClusterIdentity:
-    """Persistent identity of a micro-cluster: its centroid (EMA-updated)
-    and lifecycle bookkeeping. Membership is NOT stored here -- it is
-    recomputed fresh every time step (fix for E1/E2)."""
     __slots__ = ("centroid", "last_rep_tx_step", "last_reported_value")
 
     def __init__(self, centroid, step):
@@ -99,9 +24,7 @@ class ClusterIdentity:
 
 
 class MesoMacroTracker:
-    """Tracks the reporting-interval state for one meso- or macro-cluster
-    identity, implementing the adaptive reporting frequency of Sect. 4.3
-    (E7): a cluster whose centroid has been stable reports less often."""
+
     __slots__ = ("last_centroid", "stable_rounds", "report_interval", "last_report_step")
 
     def __init__(self, centroid, step):
@@ -127,27 +50,13 @@ class MesoMacroTracker:
 
 
 def _build_adjacency(positions, r_c):
-    """N_i^space of Sect. 3.1: node i can directly reach node j iff
-    within r_c. Used to restrict *local* information (spatial centroid,
-    battery visibility, passive monitoring) to what a real node could
-    actually observe (E12/13/14)."""
+
     d = np.linalg.norm(positions[:, None, :] - positions[None, :, :], axis=2)
     return d <= r_c
 
 
 def _split_oversized_clusters(clusters, current_members_map, readings, delta_micro, step):
-    """Cluster splitting (Sect. 4.1, E6): if a micro-cluster's CURRENT
-    members have a value spread too wide for a single centroid, split it
-    into two sub-clusters via a median split, each getting a fresh
-    ClusterIdentity seeded at its half's mean value.
 
-    clusters: dict cluster_id -> ClusterIdentity (mutated in place plus
-        returned for clarity).
-    current_members_map: dict cluster_id -> list of current member node
-        ids (this step's fresh membership, NOT historical).
-    Returns (clusters, node_cluster_idx) where node_cluster_idx is a
-    dict node -> cluster_id reflecting any splits.
-    """
     next_id = (max(clusters.keys()) + 1) if clusters else 0
     node_cluster_idx = {}
     for cid, members in list(current_members_map.items()):
@@ -185,18 +94,7 @@ def run_proposed_method(data, positions, energy_model, model_type="simple",
                          t_inactive=10, history_window=10, decay_lambda=5.0,
                          n_steps=None, enable_merge=True, r_c=35.0,
                          rng_seed=0, raw_data=None, denorm_mean=0.0, denorm_std=1.0):
-    """
-    raw_data/denorm_mean/denorm_std: if the caller normalized `data`
-    (Editor comments #15/16) before clustering, pass the ORIGINAL raw
-    array as raw_data plus the mean/std used, so reconstruction error is
-    reported in the same raw physical units as every baseline (which
-    continue to operate directly on raw data with their own,
-    independently-published thresholds -- normalization is specific to
-    how this method's Delta_micro/meso/macro tolerances are interpreted,
-    per Sect. 5.1, not a rewrite of other protocols' semantics). When
-    raw_data is None, `data` is used for both clustering and error
-    reporting (backward-compatible, un-normalized mode).
-    """
+
     rng = np.random.default_rng(rng_seed)
     n_nodes, total_steps = data.shape
     if n_steps is None:
@@ -236,8 +134,6 @@ def run_proposed_method(data, positions, energy_model, model_type="simple",
     for t in range(n_steps):
         readings = data[:, t]
 
-        # === Phase 1: adaptive cluster formation (Algorithm 1), fresh
-        #     membership every step (E1/E2). ===
         node_cluster_idx = {}
         cluster_ids_snapshot = list(clusters.keys())
         centroid_arr = np.array([clusters[c].centroid for c in cluster_ids_snapshot]) if cluster_ids_snapshot else np.array([])
@@ -263,7 +159,7 @@ def run_proposed_method(data, positions, energy_model, model_type="simple",
             mean_val = float(np.mean(readings[members]))
             clusters[cid].centroid = beta * mean_val + (1 - beta) * clusters[cid].centroid
 
-        # === Phase 1b: cluster splitting (Sect. 4.1, E6) ===
+
         clusters, node_cluster_idx = _split_oversized_clusters(clusters, current_members_map, readings, delta_micro, t)
         current_members_map = {}
         for i, cid in node_cluster_idx.items():
@@ -291,8 +187,6 @@ def run_proposed_method(data, positions, energy_model, model_type="simple",
                     del current_members_map[cid]
             node_cluster_idx = {i: merge_target.get(cid, cid) for i, cid in node_cluster_idx.items()}
 
-        # === Phase 2: hierarchical aggregation - REAL meso AND macro
-        #     levels (E3/E4) ===
         active_cids = sorted(current_members_map.keys(), key=lambda c: clusters[c].centroid)
         micro_centroids = np.array([clusters[c].centroid for c in active_cids])
         meso_of_micro = {}
@@ -331,8 +225,6 @@ def run_proposed_method(data, positions, energy_model, model_type="simple",
             M += 1
             idx = idx2
 
-        # === Phase 3: distributed representative selection - genuinely
-        #     probabilistic (Algorithm 2, Eq. 16-17, E11). ===
         transmitting_micro = {}  # node -> cluster_id, nodes that actually transmit this step
         for cid, members in current_members_map.items():
             member_pos = positions[members]
@@ -352,25 +244,12 @@ def run_proposed_method(data, positions, energy_model, model_type="simple",
                              weights[2] * phi_spatial + weights[3] * phi_history)
             scores = np.clip(scores, 1e-6, None)
             probs = scores / scores.sum()
-            # Eq. 17 admits two equally faithful readings: (a) each
-            # member independently draws Bernoulli(p_i), which can yield
-            # zero or multiple transmitters per cluster; (b) exactly one
-            # member is selected via a single weighted random draw over
-            # the distribution {p_i}, which is genuinely probabilistic
-            # (not the deterministic argmax the Editor's comment #11
-            # objected to) while remaining a true "selection" as
-            # Algorithm 2's title states. We use (b): it is the more
-            # natural reading of a *selection* mechanism, and avoids the
-            # zero-transmitter degenerate case that would otherwise force
-            # the Eq. (20) fallback far more often than a real deployment
-            # -- where a cluster reliably produces a report every round
-            # via SOME member -- would exhibit.
+
             chosen = rng.choice(len(members), p=probs)
             for k, node in enumerate(members):
                 if k == chosen:
                     transmitting_micro[node] = cid
 
-        # === Phase 4: transmission and energy accounting ===
         micro_tx_this_step = set()
         for node, cid in transmitting_micro.items():
             ident = clusters[cid]
@@ -412,7 +291,6 @@ def run_proposed_method(data, positions, energy_model, model_type="simple",
                 charge(relay, MACRO_SUMMARY_BITS, dist)
                 total_tx += 1
 
-        # base-station downlink beacon (E12-14, E21)
         for i in range(n_nodes):
             charge_rx(i, DOWNLINK_BEACON_BITS)
 
@@ -421,10 +299,6 @@ def run_proposed_method(data, positions, energy_model, model_type="simple",
             tx_history[node, tx_ptr] = 1
         tx_ptr = (tx_ptr + 1) % history_window
 
-        # === Phase 5: reconstruction, with the REAL Eq. (20) fallback (E9/E10).
-        #     Estimates are de-normalized back to raw units before
-        #     computing error, so RMSE is directly comparable to every
-        #     baseline (which operate on raw data throughout). ===
         sq_err = 0.0
         raw_readings = raw_data[:, t]
         for i in range(n_nodes):
@@ -452,7 +326,6 @@ def run_proposed_method(data, positions, energy_model, model_type="simple",
             sq_err += (raw_readings[i] - est_raw) ** 2
         reconstruction_sq_errors.append(sq_err / n_nodes)
 
-        # === Phase 6: cluster maintenance, keyed to last REP transmission (E23) ===
         clusters = {cid: c for cid, c in clusters.items() if (t - c.last_rep_tx_step) <= t_inactive}
 
         avg_batt = battery.mean() if model_type == "simple" else 100.0 * battery.mean() / energy_model.e_initial
