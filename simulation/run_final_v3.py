@@ -74,6 +74,6 @@ if __name__ == "__main__":
         all_out[f"table1_{model_type}"] = summarize(results)
         print(model_type, "done")
 
-    with open("/home/claude/repo/results/table1_v3_FINAL.json", "w") as f:
+    with open("/home/repo/results/table1_v3_FINAL.json", "w") as f:
         json.dump(all_out, f, indent=2)
     print(json.dumps(all_out, indent=2))
