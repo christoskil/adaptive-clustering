@@ -1,30 +1,4 @@
-"""
-Real-world multi-node validation using real temperature data from 96 Greek
-towns (Open-Meteo historical weather API, ~3 years hourly, Aug 2023-Sep
-2026), replacing the previous Intel Berkeley Research Lab validation
-(which had a real spatial topology but only synthetic environmental
-values). This dataset has BOTH real positions AND real values.
 
-NOTE on raw data: the raw hourly CSVs (~400 MB for 100 towns) are not
-included in this repository to keep it lightweight. To reproduce from
-scratch, pull hourly temperature_2m/relative_humidity_2m/etc. for your
-towns of interest from the Open-Meteo Historical Weather API
-(https://open-meteo.com/en/docs/historical-weather-api, free, no key
-required) with columns matching those read below (time, city, latitude,
-longitude, temperature_2m, ...), and place the CSV(s) where
-GREEK_TOWNS_CSV_GLOB points. The processed per-window arrays used for the
-manuscript's Table 3 are already included as results/greek_towns_*.npz,
-so make_paper_figures.py and this script's summary-only mode do not
-require the raw CSVs.
-
-Real geographic spans (~600x700 km across Greece) are rescaled to a
-200m-side field, preserving the REAL relative spatial arrangement of towns
-(which towns are geographically close/far stays proportionally the same),
-so that the communication range r_c=35m and the base-station placement
-(Sect. 3.4) remain physically meaningful for a small-scale WSN deployment.
-Only the absolute distance scale is changed; the real temperature values
-and their real spatial/temporal correlation structure are untouched.
-"""
 import json
 import numpy as np
 import pandas as pd
