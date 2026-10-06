@@ -7,7 +7,7 @@ from network import RadioEnergyModel
 import proposed_method_v3 as pm3
 from baselines import run_naive, run_leach, run_prediction, run_teen, run_apteen, run_compressed_sensing
 
-GREEK_TOWNS_CSV_GLOB = "/home/claude/greekdata/*.csv"  # update to your local path
+GREEK_TOWNS_CSV_GLOB = "/greekdata/*.csv" 
 RAW_DM, RAW_DME, RAW_DMA = 2.0, 6.25, 12.5
 N_STEPS = 200
 WINDOWS = ["2023-11-01", "2024-02-01", "2024-07-01", "2024-10-15", "2025-01-15", "2025-05-01"]
@@ -75,7 +75,7 @@ for m, vals in all_results.items():
     }
 
 print(json.dumps(summary, indent=2))
-with open("/home/claude/repo/results/greek_towns_validation_FINAL.json", "w") as f:
+with open("/home/repo/results/greek_towns_validation_FINAL.json", "w") as f:
     json.dump(summary, f, indent=2)
-np.savez("/home/claude/repo/results/greek_towns_positions.npz", positions=positions, town_names=towns['city'].values,
+np.savez("/home/repo/results/greek_towns_positions.npz", positions=positions, town_names=towns['city'].values,
          positions_km=positions_km)
