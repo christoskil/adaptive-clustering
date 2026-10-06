@@ -1,24 +1,9 @@
-"""
-Baseline protocols used for comparison against the proposed method:
-  - Naive: every node transmits every step.
-  - LEACH: classic rotating-cluster-head spatial clustering with the
-    first-order radio energy model.
-  - Prediction: dual exponential-smoothing prediction (node + base station).
-  - TEEN: threshold-sensitive energy-efficient protocol (hard + soft
-    thresholds), added in response to Reviewer 1.
-  - CompressedSensing: a simplified spatially-correlated random-projection
-    baseline, added in response to Reviewer 1.
-"""
+
 import numpy as np
 
 
 def base_station_position(positions):
-    """Fixed base-station location used consistently by every method
-    (naive, LEACH, TEEN, APTEEN, prediction, compressed sensing, and the
-    proposed method): north of the field, one field-side-length beyond
-    the top edge, centered in x -- matching the illustration in Fig. 1
-    and replacing the previous unexplained "+50" fudge term (Editor
-    comment #20)."""
+
     field_min, field_max = positions.min(axis=0), positions.max(axis=0)
     field_side = max(field_max[0] - field_min[0], field_max[1] - field_min[1], 1.0)
     return np.array([(field_min[0] + field_max[0]) / 2.0, field_max[1] + field_side])
@@ -150,9 +135,7 @@ def run_leach(data, positions, energy_model, model_type="simple",
 
 def run_prediction(data, positions, energy_model, model_type="simple",
                     alpha=0.3, threshold=0.5, n_steps=None):
-    """Dual exponential-smoothing prediction: node and base station keep
-    identical predictors; node transmits only when the actual reading
-    deviates from the predicted value by more than `threshold`."""
+
     n_nodes, total_steps = data.shape
     if n_steps is None:
         n_steps = total_steps
@@ -197,11 +180,7 @@ def run_prediction(data, positions, energy_model, model_type="simple",
 def run_teen(data, positions, energy_model, model_type="simple",
              hard_threshold=1.0, soft_threshold=0.3, cluster_head_prob=0.1,
              n_steps=None, seed=2):
-    """Threshold-sensitive Energy-Efficient sensor Network protocol
-    (Manjeshwar & Agrawal, 2001), layered on the same LEACH-style spatial
-    clusters used above. A cluster member transmits only if its reading
-    exceeds the hard threshold AND has changed by more than the soft
-    threshold since its last transmission."""
+
     n_nodes, total_steps = data.shape
     if n_steps is None:
         n_steps = total_steps
@@ -293,10 +272,7 @@ def run_teen(data, positions, energy_model, model_type="simple",
 def run_apteen(data, positions, energy_model, model_type="simple",
                hard_threshold=1.0, soft_threshold=0.3, count_time=20,
                cluster_head_prob=0.1, n_steps=None, seed=4):
-    """Adaptive TEEN: as TEEN, but each member is additionally forced to
-    report at least once every `count_time` steps even if the thresholds
-    are not met (the hybrid proactive/reactive behaviour that
-    distinguishes APTEEN from TEEN)."""
+
     n_nodes, total_steps = data.shape
     if n_steps is None:
         n_steps = total_steps
@@ -390,13 +366,7 @@ def run_apteen(data, positions, energy_model, model_type="simple",
 
 def run_compressed_sensing(data, positions, energy_model, model_type="simple",
                             sample_ratio=0.15, n_steps=None, seed=3):
-    """Simplified compressed-sensing-style baseline: a random subset of
-    nodes (sample_ratio) transmits each round; the base station recovers
-    the full field via a linear least-squares fit against the spatially
-    correlated basis formed by the transmitting nodes' k nearest
-    transmitting neighbours (a lightweight stand-in for full sparse
-    recovery, sufficient for the data-reduction / RMSE comparison the
-    reviewer requested)."""
+
     n_nodes, total_steps = data.shape
     if n_steps is None:
         n_steps = total_steps
