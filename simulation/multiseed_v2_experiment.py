@@ -62,6 +62,6 @@ for model_type in ["simple", "radio"]:
     naive_batt = np.array([r["naive_battery"] for r in results[model_type]])
     summary[model_type]["naive"] = {"battery_mean": round(naive_batt.mean(),3), "battery_std": round(naive_batt.std(),3)}
 
-with open("/home/claude/repo/results/multiseed_v2_results.json", "w") as f:
+with open("/home/repo/results/multiseed_v2_results.json", "w") as f:
     json.dump(summary, f, indent=2)
 print(json.dumps(summary, indent=2))
