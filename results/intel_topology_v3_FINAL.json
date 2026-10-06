@@ -1,0 +1,61 @@
+{
+  "summary": {
+    "naive": {
+      "battery_mean": 98.36959907407409
+    },
+    "leach": {
+      "reduction_mean": 89.95925925925926,
+      "reduction_std": 0.020786985482078805,
+      "rmse_mean": 2.968213838863405,
+      "battery_mean": 98.86149418425927
+    },
+    "prediction": {
+      "reduction_mean": 78.4074074074074,
+      "reduction_std": 0.954970392175285,
+      "rmse_mean": 0.22924950765520066,
+      "battery_mean": 99.64734300555558
+    },
+    "teen": {
+      "reduction_mean": 89.96111111111111,
+      "reduction_std": 0.01697250257391162,
+      "rmse_mean": 0.11609977869402999,
+      "battery_mean": 99.39383030925926
+    },
+    "ours": {
+      "reduction_mean": 85.37222222222222,
+      "reduction_std": 1.208372711150616,
+      "rmse_mean": 0.7811080304595206,
+      "battery_mean": 99.76034344601786
+    }
+  },
+  "seed42_detail": {
+    "naive": {
+      "total_tx": 10800,
+      "battery": 98.36959907407409
+    },
+    "leach": {
+      "total_tx": 1082,
+      "reduction": 89.98148148148148,
+      "rmse": 3.256790957778407,
+      "battery": 98.86234911111112
+    },
+    "prediction": {
+      "total_tx": 2338,
+      "reduction": 78.35185185185185,
+      "rmse": 0.2297887354176992,
+      "battery": 99.64516045833336
+    },
+    "teen": {
+      "total_tx": 1086,
+      "reduction": 89.94444444444444,
+      "rmse": 0.11553307327168802,
+      "battery": 99.39430042592592
+    },
+    "ours": {
+      "total_tx": 1624,
+      "reduction": 84.96296296296296,
+      "rmse": 0.7997994928323303,
+      "battery": 99.75249732499933
+    }
+  }
+}

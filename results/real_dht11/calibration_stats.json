@@ -1,0 +1,19 @@
+{
+  "source": "http://www.iprism.eu/assets/greenhouse_dataset_sept_2020.csv",
+  "note": "Single-greenhouse DHT11 deployment (BSc thesis, A. Matsoukas, iPRISM group) -- one sensor location, not a multi-node spatial network. Stats below computed on a 1105-row (~2.3-day) excerpt retrieved 2026; used only to calibrate the TEMPORAL statistics of the synthetic generator (Editor comment #17). No real multi-node spatial correlation data exists to calibrate the spatial-field/microclimate-class structure, which remains a documented modelling choice.",
+  "n_samples": 1105,
+  "air_temp_mean_degC": 27.769,
+  "air_temp_std_degC": 3.239,
+  "air_temp_min_degC": 23.0,
+  "air_temp_max_degC": 34.0,
+  "humidity_mean_pct": 70.237,
+  "humidity_std_pct": 9.584,
+  "soil_temp_mean_degC": 25.410,
+  "soil_temp_std_degC": 2.560,
+  "air_temp_lag1_autocorrelation": 0.9942,
+  "air_temp_AR1_innovation_std": 0.3607,
+  "diurnal_half_amplitude_degC_day0": 4.0,
+  "diurnal_half_amplitude_degC_day1": 5.0,
+  "mean_abs_step_change_degC": 0.0797,
+  "std_step_change_degC": 0.3611
+}

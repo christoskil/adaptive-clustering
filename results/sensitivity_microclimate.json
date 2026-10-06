@@ -1,0 +1,38 @@
+{
+  "0.0": {
+    "reduction_mean": 93.499,
+    "reduction_std": 0.1674335689161499,
+    "rmse_mean": 0.7473443474534801,
+    "leach_reduction_mean": 89.99000000000001
+  },
+  "1.0": {
+    "reduction_mean": 93.28399999999999,
+    "reduction_std": 0.14012137595670351,
+    "rmse_mean": 0.741585202325533,
+    "leach_reduction_mean": 89.99000000000001
+  },
+  "1.5": {
+    "reduction_mean": 93.102,
+    "reduction_std": 0.18397282408008095,
+    "rmse_mean": 0.7629275753819785,
+    "leach_reduction_mean": 89.99000000000001
+  },
+  "3.0": {
+    "reduction_mean": 92.062,
+    "reduction_std": 0.33099244704373343,
+    "rmse_mean": 0.7806146874446116,
+    "leach_reduction_mean": 89.99000000000001
+  },
+  "4.5": {
+    "reduction_mean": 90.776,
+    "reduction_std": 0.32781702213277814,
+    "rmse_mean": 0.7908285200611402,
+    "leach_reduction_mean": 89.99000000000001
+  },
+  "6.0": {
+    "reduction_mean": 89.463,
+    "reduction_std": 0.4741582014475766,
+    "rmse_mean": 0.800356252603514,
+    "leach_reduction_mean": 89.99000000000001
+  }
+}

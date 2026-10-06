@@ -1,0 +1,14 @@
+{
+  "naive": {
+    "depletion_step": 28,
+    "final_battery": 0.0
+  },
+  "leach": {
+    "depletion_step": 239,
+    "final_battery": 2.5132720578392935
+  },
+  "ours": {
+    "depletion_step": 376,
+    "final_battery": 22.07229596491807
+  }
+}

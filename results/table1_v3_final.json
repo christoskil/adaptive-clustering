@@ -1,0 +1,110 @@
+{
+  "simple": {
+    "leach": {
+      "reduction_mean": 89.99,
+      "reduction_std": 0.005,
+      "rmse_mean": 3.0492,
+      "rmse_std": 0.1259,
+      "battery_mean": 90.0,
+      "battery_std": 0.0
+    },
+    "prediction": {
+      "reduction_mean": 79.071,
+      "reduction_std": 0.2,
+      "rmse_mean": 0.2296,
+      "rmse_std": 0.001,
+      "battery_mean": 97.907,
+      "battery_std": 0.02
+    },
+    "teen": {
+      "reduction_mean": 89.989,
+      "reduction_std": 0.004,
+      "rmse_mean": 0.117,
+      "rmse_std": 0.0007,
+      "battery_mean": 94.978,
+      "battery_std": 0.02
+    },
+    "apteen": {
+      "reduction_mean": 89.992,
+      "reduction_std": 0.006,
+      "rmse_mean": 0.1171,
+      "rmse_std": 0.0007,
+      "battery_mean": 94.982,
+      "battery_std": 0.023
+    },
+    "compressed_sensing": {
+      "reduction_mean": 85.0,
+      "reduction_std": 0.0,
+      "rmse_mean": 3.3902,
+      "rmse_std": 0.1661,
+      "battery_mean": 98.5,
+      "battery_std": 0.0
+    },
+    "proposed": {
+      "reduction_mean": 79.54,
+      "reduction_std": 0.798,
+      "rmse_mean": 0.3259,
+      "rmse_std": 0.0063,
+      "battery_mean": 97.954,
+      "battery_std": 0.08
+    },
+    "naive": {
+      "battery_mean": 90.0,
+      "battery_std": 0.0
+    }
+  },
+  "radio": {
+    "leach": {
+      "reduction_mean": 89.99,
+      "reduction_std": 0.005,
+      "rmse_mean": 3.0492,
+      "rmse_std": 0.1259,
+      "battery_mean": 67.821,
+      "battery_std": 1.622
+    },
+    "prediction": {
+      "reduction_mean": 79.071,
+      "reduction_std": 0.2,
+      "rmse_mean": 0.2296,
+      "rmse_std": 0.001,
+      "battery_mean": 48.306,
+      "battery_std": 2.399
+    },
+    "teen": {
+      "reduction_mean": 89.989,
+      "reduction_std": 0.004,
+      "rmse_mean": 0.117,
+      "rmse_std": 0.0007,
+      "battery_mean": 71.143,
+      "battery_std": 1.587
+    },
+    "apteen": {
+      "reduction_mean": 89.992,
+      "reduction_std": 0.006,
+      "rmse_mean": 0.1171,
+      "rmse_std": 0.0007,
+      "battery_mean": 71.178,
+      "battery_std": 1.539
+    },
+    "compressed_sensing": {
+      "reduction_mean": 85.0,
+      "reduction_std": 0.0,
+      "rmse_mean": 3.3903,
+      "rmse_std": 0.1667,
+      "battery_mean": 60.924,
+      "battery_std": 1.894
+    },
+    "proposed": {
+      "reduction_mean": 79.54,
+      "reduction_std": 0.798,
+      "rmse_mean": 0.326,
+      "rmse_std": 0.0063,
+      "battery_mean": 67.559,
+      "battery_std": 2.371
+    },
+    "naive": {
+      "battery_mean": 6.946,
+      "battery_std": 1.105
+    }
+  }
+}

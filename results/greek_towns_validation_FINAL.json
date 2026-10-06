@@ -1,0 +1,57 @@
+{
+  "n_towns": 96,
+  "n_windows": 6,
+  "n_seeds_per_window": 3,
+  "n_trials": 18,
+  "naive": {
+    "battery_mean": 11.777
+  },
+  "leach": {
+    "reduction_mean": 89.991,
+    "reduction_std": 0.002,
+    "rmse_mean": 2.3666,
+    "rmse_std": 0.3784,
+    "battery_mean": 76.296,
+    "battery_std": 0.086
+  },
+  "prediction": {
+    "reduction_mean": 43.346,
+    "reduction_std": 6.432,
+    "rmse_mean": 0.1941,
+    "rmse_std": 0.0096,
+    "battery_mean": 26.087,
+    "battery_std": 3.516
+  },
+  "teen": {
+    "reduction_mean": 89.99,
+    "reduction_std": 0.004,
+    "rmse_mean": 0.2608,
+    "rmse_std": 0.2668,
+    "battery_mean": 77.288,
+    "battery_std": 0.241
+  },
+  "apteen": {
+    "reduction_mean": 89.991,
+    "reduction_std": 0.005,
+    "rmse_mean": 0.2588,
+    "rmse_std": 0.2637,
+    "battery_mean": 77.357,
+    "battery_std": 0.275
+  },
+  "compressed_sensing": {
+    "reduction_mean": 85.417,
+    "reduction_std": 0.0,
+    "rmse_mean": 2.0828,
+    "rmse_std": 0.2272,
+    "battery_mean": 70.76,
+    "battery_std": 0.205
+  },
+  "proposed": {
+    "reduction_mean": 91.679,
+    "reduction_std": 0.753,
+    "rmse_mean": 0.7788,
+    "rmse_std": 0.0116,
+    "battery_mean": 88.703,
+    "battery_std": 1.197
+  }
+}
